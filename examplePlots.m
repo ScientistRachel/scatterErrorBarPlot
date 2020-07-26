@@ -23,7 +23,7 @@ box off % box off creates less cluttered overall figure and is generally prefera
 title({'Default Options','(95% Confidence Interval Error Bars)'},'FontSize',16)
 
 % Save the example plot
-saveas(gcf,'DefaultOptions.png','png')
+saveas(gcf,['examplePlots' filesep 'DefaultOptions.png'],'png')
 
 %% (2) Plot changing the options provided in the function
 
@@ -54,4 +54,4 @@ xlim([0 6]) % Add a little spacing to make the figure look nice
 title({'Changing the Plotting Options','(Standard Deviation Error Bars)'},'FontSize',16)
 
 % Save the example plot
-saveas(gcf,'PlottingOptions.png','png')
+saveas(gcf,['examplePlots' filesep 'PlottingOptions.png'],'png')
