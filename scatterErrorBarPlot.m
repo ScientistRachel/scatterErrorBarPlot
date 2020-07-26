@@ -32,6 +32,8 @@ function scatterErrorBarPlot(A,errorType,cmap,marker_size,marker_order,cmap_edge
 % 2020/05/29 RML - no longer requires dependent functions
 % 2020/07/02 RML - add flexibility in choosing error bar types, remove
 %                  paired colors (now covered by colormap options)
+% 2020/07/26 RML - convert from nanmean/nanstd to 'omitnan' to remove
+%                  statistical toolbox dependency.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%% Load default parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -93,7 +95,7 @@ end
 for kk = 1:size(A,2)
 
     slice = A(:,kk);
-    bar(kk,nanmean(slice),'FaceColor',cmap(kk,:),'EdgeColor',cmap_edge(kk,:),'linewidth',2)
+    bar(kk,mean(slice,'omitnan'),'FaceColor',cmap(kk,:),'EdgeColor',cmap_edge(kk,:),'linewidth',2)
     
     if kk == 1
         hold on
@@ -122,8 +124,8 @@ if strcmp(errorType,'STD') % Standard Deviation Error Bars
     for kk = 1:size(A,2) 
 
         slice = A(:,kk);
-        barVal = nanstd(slice);        
-        errorbar([kk -8],[nanmean(slice) 0],[barVal 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
+        barVal = std(slice,'omitnan');        
+        errorbar([kk -8],[mean(slice,'omitnan') 0],[barVal 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
 
     end
     
@@ -133,8 +135,8 @@ elseif strcmp(errorType,'SEM') % Standard Error of the Mean Error Bars
 
         slice = A(:,kk);
         N = numel(find(~isnan(slice)));
-        barVal = nanstd(slice)/sqrt(N);        
-        errorbar([kk -8],[nanmean(slice) 0],[barVal 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
+        barVal = std(slice,'omitnan')/sqrt(N);        
+        errorbar([kk -8],[mean(slice,'omitnan') 0],[barVal 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
 
     end
     
@@ -145,8 +147,8 @@ elseif strcmp(errorType,'95CI') % 95% CI Error Bars
         slice = A(:,kk);
         N = numel(find(~isnan(slice)));
         t_star = tinv(1-0.05/2,N-1);
-        barVal = t_star*nanstd(slice)/sqrt(N);        
-        errorbar([kk -8],[nanmean(slice) 0],[barVal 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
+        barVal = t_star*std(slice,'omitnan')/sqrt(N);        
+        errorbar([kk -8],[mean(slice,'omitnan') 0],[barVal 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
 
     end
     
@@ -161,10 +163,10 @@ elseif strcmp(errorType,'STDratio') % STD Error Bars for Ratio Values
         meanLog = mean(sliceLog);
         upLog = meanLog + stdLog;
         lowLog = meanLog - stdLog;
-        upperB = exp(upLog) - nanmean(slice);
-        lowerB = exp(lowLog) - nanmean(slice);        
+        upperB = exp(upLog) - mean(slice,'omitnan');
+        lowerB = exp(lowLog) - mean(slice,'omitnan');        
         
-        errorbar([kk -8],[nanmean(slice) 0],[lowerB 0],[upperB 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
+        errorbar([kk -8],[mean(slice,'omitnan') 0],[lowerB 0],[upperB 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
 
     end
     
@@ -183,10 +185,10 @@ elseif strcmp(errorType,'STDratio') % SEM Error Bars for Ratio Values
         upLog = meanLog + stdLog/sqrt(N);
         lowLog = meanLog - stdLog/sqrt(N);
         
-        upperB = exp(upLog) - nanmean(slice);
-        lowerB = exp(lowLog) - nanmean(slice);        
+        upperB = exp(upLog) - mean(slice,'omitnan');
+        lowerB = exp(lowLog) - mean(slice,'omitnan');        
         
-        errorbar([kk -8],[nanmean(slice) 0],[lowerB 0],[upperB 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
+        errorbar([kk -8],[mean(slice,'omitnan') 0],[lowerB 0],[upperB 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
 
     end
     
@@ -206,10 +208,10 @@ elseif strcmp(errorType,'STDratio') % 95% CI Error Bars for Ratio Values
         upLog = meanLog + stdLog/sqrt(N)*t_star;
         lowLog = meanLog - stdLog/sqrt(N)*t_star;
         
-        upperB = exp(upLog) - nanmean(slice);
-        lowerB = exp(lowLog) - nanmean(slice);        
+        upperB = exp(upLog) - mean(slice,'omitnan');
+        lowerB = exp(lowLog) - mean(slice,'omitnan');        
         
-        errorbar([kk -8],[nanmean(slice) 0],[lowerB 0],[upperB 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
+        errorbar([kk -8],[mean(slice,'omitnan') 0],[lowerB 0],[upperB 0],'.k','LineWidth',2,'Marker','none') % The value at -8 is a silly way to get wider error bars
 
     end
     
