@@ -34,6 +34,7 @@ function scatterErrorBarPlot(A,errorType,cmap,marker_size,marker_order,cmap_edge
 %                  paired colors (now covered by colormap options)
 % 2020/07/26 RML - convert from nanmean/nanstd to 'omitnan' to remove
 %                  statistical toolbox dependency.
+% 2020/08/01 RML - make ratio error bars work with NaNs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%% Load default parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,6 +158,7 @@ elseif strcmp(errorType,'STDratio') % STD Error Bars for Ratio Values
     for kk = 1:size(A,2) 
 
         slice = A(:,kk);
+        slice(isnan(slice)) = [];
         
         sliceLog = log(slice);
         stdLog = std(sliceLog);
@@ -175,6 +177,7 @@ elseif strcmp(errorType,'STDratio') % SEM Error Bars for Ratio Values
     for kk = 1:size(A,2) 
 
         slice = A(:,kk);
+        slice(isnan(slice)) = [];
         
         sliceLog = log(slice);
         N = numel(find(~isnan(slice)));
@@ -197,6 +200,7 @@ elseif strcmp(errorType,'STDratio') % 95% CI Error Bars for Ratio Values
     for kk = 1:size(A,2) 
 
         slice = A(:,kk);
+        slice(isnan(slice)) = [];
         
         sliceLog = log(slice);
         N = numel(find(~isnan(slice)));
