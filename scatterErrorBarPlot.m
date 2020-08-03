@@ -159,6 +159,9 @@ elseif strcmp(errorType,'STDratio') % STD Error Bars for Ratio Values
 
         slice = A(:,kk);
         slice(isnan(slice)) = [];
+        if sum(slice==0)
+            warning('log(0) = -Inf. Error bars will not display')
+        end
         
         sliceLog = log(slice);
         stdLog = std(sliceLog);
@@ -172,12 +175,15 @@ elseif strcmp(errorType,'STDratio') % STD Error Bars for Ratio Values
 
     end
     
-elseif strcmp(errorType,'STDratio') % SEM Error Bars for Ratio Values
+elseif strcmp(errorType,'SEMratio') % SEM Error Bars for Ratio Values
     
     for kk = 1:size(A,2) 
 
         slice = A(:,kk);
         slice(isnan(slice)) = [];
+        if sum(slice==0)
+            warning('log(0) = -Inf. Error bars will not display')
+        end
         
         sliceLog = log(slice);
         N = numel(find(~isnan(slice)));
@@ -195,12 +201,15 @@ elseif strcmp(errorType,'STDratio') % SEM Error Bars for Ratio Values
 
     end
     
-elseif strcmp(errorType,'STDratio') % 95% CI Error Bars for Ratio Values
+elseif strcmp(errorType,'95CIratio') % 95% CI Error Bars for Ratio Values
     
     for kk = 1:size(A,2) 
 
         slice = A(:,kk);
         slice(isnan(slice)) = [];
+        if sum(slice==0)
+            warning('log(0) = -Inf. Error bars will not display')
+        end
         
         sliceLog = log(slice);
         N = numel(find(~isnan(slice)));
