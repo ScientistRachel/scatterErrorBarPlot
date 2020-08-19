@@ -10,7 +10,7 @@ function scatterErrorBarPlot(A,errorType,cmap,marker_size,marker_order,cmap_edge
 %               of the mean), '95CI' (95% confidence intervals), and
 %               'STDratio', 'SEMratio','95CIratio' (log corrected error bars).
 %               Important note: these are independent, not joint, 95%
-%               confidence intervals.
+%               confidence intervals.  Can also choose 'none' to skip bars.
 % cmap          b x 3 matrix of rgb colors (values between 0 and 1) for bars.
 %               Defaults to color blind friendly colormap.  Colormap
 %               repeats if b < n.
@@ -35,6 +35,7 @@ function scatterErrorBarPlot(A,errorType,cmap,marker_size,marker_order,cmap_edge
 % 2020/07/26 RML - convert from nanmean/nanstd to 'omitnan' to remove
 %                  statistical toolbox dependency.
 % 2020/08/01 RML - make ratio error bars work with NaNs
+% 2020/08/19 RML - add option of 'none' for error bars
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%% Load default parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,9 +86,9 @@ end
 if ~exist('errorType','var') || isempty(errorType)
     errorType = '95CI';
 end
-typeCheck = strcmp(errorType,{'95CI','STD','SEM','95CIratio','STDratio','SEMratio'});
+typeCheck = strcmp(errorType,{'95CI','STD','SEM','95CIratio','STDratio','SEMratio','none'});
 if sum(typeCheck) == 0
-    error('Please enter a valid error bar type: ''95CI'',''STD'',''SEM'',''95CIratio'',''STDratio'',''SEMratio''')
+    error('Please enter a valid error bar type: ''95CI'',''STD'',''SEM'',''95CIratio'',''STDratio'',''SEMratio'',''none''')
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Start Plotting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
